@@ -7,6 +7,24 @@ class BooksController < ApplicationController
     @book = Book.new
   end
 
+  
+  def index
+    @books = Book.all
+    @booknew = Book.new
+    @user = current_user
+    
+  end
+  
+  def show
+    @booknew = Book.new
+    @book = Book.find(params[:id])
+    impressionist(@book, nil, unique: [:ip_address])
+    @user = @book.user
+    # @user = User.find(@book.user_id)
+    @book_comment = BookComment.new
+    @book_comments = @book.book_comments
+  end
+  
   def create
     @booknew = Book.new(book_params) 
     @booknew.user_id =  current_user.id 
@@ -18,23 +36,6 @@ class BooksController < ApplicationController
     render :index
   end
 end
-
-  def index
-    @books = Book.all
-    @booknew = Book.new
-    @user = current_user
-
-  end
-
-  def show
-    @booknew = Book.new
-    @book = Book.find(params[:id])
-    impressionist(@book, nil, unique: [:ip_address])
-    @user = @book.user
-    # @user = User.find(@book.user_id)
-    @book_comment = BookComment.new
-    @book_comments = @book.book_comments
-  end
 
   def edit
     @book = Book.find(params[:id])
